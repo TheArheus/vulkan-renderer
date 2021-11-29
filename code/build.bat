@@ -16,14 +16,24 @@ REM Here is shaders building
 if not exist ..\shaders mkdir ..\shaders
 if exist triangle.vert.glsl call glslangValidator triangle.vert.glsl -V -o ..\shaders\triangle.vert.spv
 if exist triangle.frag.glsl call glslangValidator triangle.frag.glsl -V -o ..\shaders\triangle.frag.spv
+if exist meshlet.vert.glsl call glslangValidator meshlet.vert.glsl -V -o ..\shaders\meshlet.vert.spv
+if exist meshfvf.vert.glsl call glslangValidator meshfvf.vert.glsl -V -o ..\shaders\meshfvf.vert.spv
 if exist ..\shaders\triangle.vert.glsl call glslangValidator ..\shaders\triangle.vert.glsl -V -o ..\shaders\triangle.vert.spv
 if exist ..\shaders\triangle.frag.glsl call glslangValidator ..\shaders\triangle.frag.glsl -V -o ..\shaders\triangle.frag.spv
+if exist ..\shaders\meshlet.vert.glsl call glslangValidator ..\shaders\meshlet.vert.glsl -V -o ..\shaders\meshlet.vert.spv
+if exist ..\shaders\meshfvf.vert.glsl call glslangValidator ..\shaders\meshfvf.vert.glsl -V -o ..\shaders\meshfvf.vert.spv
 xcopy triangle.vert.glsl ..\shaders\
 xcopy triangle.frag.glsl ..\shaders\
+xcopy meshlet.vert.glsl ..\shaders\
+xcopy meshfvf.vert.glsl ..\shaders\
 if exist triangle.vert.glsl del triangle.vert.glsl
 if exist triangle.frag.glsl del triangle.frag.glsl
+if exist meshlet.vert.glsl del meshlet.vert.glsl
+if exist meshfvf.vert.glsl del meshfvf.vert.glsl
 if exist triangle.vert.spv  del triangle.vert.spv
 if exist triangle.frag.spv  del triangle.frag.spv
+if exist meshlet.vert.spv  del meshlet.vert.spv
+if exist meshfvf.vert.spv  del meshfvf.vert.spv
 
 if not exist ..\build mkdir ..\build
 pushd ..\build

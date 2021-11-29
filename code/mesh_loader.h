@@ -1,9 +1,6 @@
 #if !defined(MESH_H)
 #define MESH_H
 
-#include <array>
-#include <vector>
-
 union tex2d
 {
     struct
@@ -63,8 +60,8 @@ typedef struct
 struct meshlet_t
 {
     uint32_t Vertices[64];
-    uint32_t Indices[126]; // NOTE: Up to 42 triangles
-    uint8_t IndexCount;
+    uint32_t Indices[126*3]; // NOTE: Up to 126 triangles
+    uint8_t TriangleCount;
     uint8_t VertexCount;
 };
 
@@ -89,7 +86,7 @@ extern int32_t MeshesCount;
 
 void LoadMeshData(mesh_t*, char*);
 static void LoadTexture(mesh_t* Mesh, char* Filename);
-void LoadMesh(char* Object, char* Texture, v3 Scaling, v3 Rotating, v3 Translating);
+void LoadMesh(char* ObjectPath);
 
 static tex2d 
 V3ToUVs(v3 Vert)
