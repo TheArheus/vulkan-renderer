@@ -215,7 +215,7 @@ void LoadMeshData(mesh_t* Mesh, char* FileName)
     }
 }
 
-void 
+static void 
 BuildMeshlets(mesh_t* Mesh)
 {
     meshlet_t CurrentMeshlet = {};
@@ -231,37 +231,38 @@ BuildMeshlets(mesh_t* Mesh)
         uint8_t& bv = MeshletVertices[Face.b];
         uint8_t& cv = MeshletVertices[Face.c];
 
-        if(CurrentMeshlet.VertexCount + (av == 0xff) + (bv == 0xff) + (cv == 0xff) > 64 || CurrentMeshlet.IndexCount + 3 > 126)
+        if(CurrentMeshlet.VertexCount + (av == 0xff) + (bv == 0xff) + (cv == 0xff) > 64 || CurrentMeshlet.TriangleCount >= 126)
         {
             Mesh->Meshlets.push_back(CurrentMeshlet);
             CurrentMeshlet = {};
             memset(MeshletVertices.data(), 0xff, Mesh->Vertices.size());
         }
 
-        if(av != 0xff)
+        if(av == 0xff)
         {
             av = CurrentMeshlet.VertexCount;
             CurrentMeshlet.Vertices[CurrentMeshlet.VertexCount++] = Face.a;
         }
 
-        if(bv != 0xff)
+        if(bv == 0xff)
         {
             bv = CurrentMeshlet.VertexCount;
             CurrentMeshlet.Vertices[CurrentMeshlet.VertexCount++] = Face.b;
         }
 
-        if(cv != 0xff)
+        if(cv == 0xff)
         {
             cv = CurrentMeshlet.VertexCount;
             CurrentMeshlet.Vertices[CurrentMeshlet.VertexCount++] = Face.c;
         }
 
-        CurrentMeshlet.Indices[CurrentMeshlet.IndexCount++] = av;
-        CurrentMeshlet.Indices[CurrentMeshlet.IndexCount++] = bv;
-        CurrentMeshlet.Indices[CurrentMeshlet.IndexCount++] = cv;
+        CurrentMeshlet.Indices[CurrentMeshlet.TriangleCount*3 + 0] = av;
+        CurrentMeshlet.Indices[CurrentMeshlet.TriangleCount*3 + 1] = bv;
+        CurrentMeshlet.Indices[CurrentMeshlet.TriangleCount*3 + 2] = cv;
+        CurrentMeshlet.TriangleCount++;
     }
 
-    if(CurrentMeshlet.IndexCount)
+    if(CurrentMeshlet.TriangleCount)
     {
         Mesh->Meshlets.push_back(CurrentMeshlet);
     }
@@ -341,9 +342,9 @@ LoadMesh(char* ObjectPath)
     NewMesh.Mesh = NewVertexBuffer;
     NewMesh.ConvertedVertexIndices = NewIndexBuffer;
 
-#if RTX
+//#if RTX
     BuildMeshlets(&NewMesh);
-#endif
+//#endif
 
     Meshes[MeshesCount++] = NewMesh;
 }
